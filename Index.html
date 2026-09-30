@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nós resolvemos 100% do que procuras</title>
+
+<meta name="description" content="Tu procuras. Nós encontramos. Encontra empregos, cursos, documentos, empresas, serviços, negócios e outras soluções.">
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#07100c;
+  color:#fff;
+}
+
+header{
+  background:#0b2417;
+  padding:35px 18px;
+  text-align:center;
+  border-bottom:1px solid #1b4931;
+}
+
+h1{
+  margin:0 0 10px;
+  color:#00ff88;
+  font-size:28px;
+}
+
+header p{
+  margin:0;
+  color:#ddd;
+  font-size:16px;
+}
+
+main{
+  max-width:700px;
+  margin:auto;
+  padding:20px;
+}
+
+.card{
+  background:#0d1912;
+  border:1px solid #1b4931;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+}
+
+h2{
+  color:#00ff88;
+  margin-top:0;
+}
+
+label{
+  display:block;
+  margin:16px 0 7px;
+  font-weight:bold;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:14px;
+  border-radius:9px;
+  border:1px solid #31543f;
+  background:#07100c;
+  color:#fff;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#00ff88;
+}
+
+textarea{
+  min-height:150px;
+  resize:vertical;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  margin-top:20px;
+  border:0;
+  border-radius:10px;
+  background:#00ff88;
+  color:#001b0d;
+  font-weight:bold;
+  font-size:17px;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.6;
+}
+
+#resultado{
+  display:none;
+  margin-top:18px;
+  padding:16px;
+  border-radius:10px;
+  background:#12321f;
+  line-height:1.5;
+}
+
+.erro{
+  background:#421818 !important;
+}
+
+.whatsapp{
+  display:block;
+  text-align:center;
+  text-decoration:none;
+  background:#20d66b;
+  color:#001b0d;
+  padding:15px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+footer{
+  text-align:center;
+  padding:25px 15px;
+  color:#999;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>NÓS RESOLVEMOS 100%</h1>
+  <p>Tu procuras. Nós encontramos.</p>
+</header>
+
+<main>
+
+<div class="card">
+
+<h2>Faz o teu pedido</h2>
+
+<p>
+Diz-nos exatamente o que procuras e vamos tentar encontrar a solução.
+</p>
+
+<form id="form">
+
+<label for="nome">Teu nome</label>
+
+<input
+  id="nome"
+  type="text"
+  required
+  placeholder="Digite o teu nome"
+>
+
+<label for="telefone">WhatsApp</label>
+
+<input
+  id="telefone"
+  type="tel"
+  required
+  placeholder="Ex.: 949623013"
+>
+
+<label for="categoria">O que procuras?</label>
+
+<select id="categoria" required>
+
+<option value="">Seleciona uma categoria</option>
+
+<option value="Emprego">Emprego</option>
+
+<option value="Curso ou formação">
+Curso ou formação
+</option>
+
+<option value="Empresa ou serviço">
+Empresa ou serviço
+</option>
+
+<option value="Documento ou procedimento">
+Documento ou procedimento
+</option>
+
+<option value="Negócio ou fornecedor">
+Negócio ou fornecedor
+</option>
+
+<option value="Pesquisa personalizada">
+Pesquisa personalizada
+</option>
+
+</select>
+
+<label for="provincia">Província</label>
+
+<input
+  id="provincia"
+  type="text"
+  placeholder="Ex.: Luanda"
+>
+
+<label for="cidade">Cidade/Município</label>
+
+<input
+  id="cidade"
+  type="text"
+  placeholder="Ex.: Viana"
+>
+
+<label for="pedido">Explica o que procuras</label>
+
+<textarea
+  id="pedido"
+  required
+  placeholder="Escreve exatamente aquilo que precisas encontrar..."
+></textarea>
+
+<button id="botao" type="submit">
+ENVIAR PEDIDO
+</button>
+
+<div id="resultado"></div>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h2>Contacto direto</h2>
+
+<p>
+Se preferires, também podes falar connosco diretamente pelo WhatsApp.
+</p>
+
+<a
+  class="whatsapp"
+  href="https://wa.me/244949623013"
+  target="_blank"
+  rel="noopener"
+>
+FALAR NO WHATSAPP
+</a>
+
+</div>
+
+</main>
+
+<footer>
+© 2026 Nós resolvemos 100% do que procuras
+</footer>
+
+
+<script>
+
+const URL_SMART_WORKER =
+"https://biirfrcetsogqcbimhcg.supabase.co/functions/v1/smart-worker";
+
+const form =
+document.getElementById("form");
+
+const botao =
+document.getElementById("botao");
+
+const resultado =
+document.getElementById("resultado");
+
+
+form.addEventListener("submit", async function(event){
+
+event.preventDefault();
+
+botao.disabled = true;
+
+botao.textContent = "A ENVIAR...";
+
+resultado.style.display = "none";
+
+
+const dados = {
+
+client_name:
+document.getElementById("nome").value.trim(),
+
+client_phone:
+document.getElementById("telefone").value.trim(),
+
+category:
+document.getElementById("categoria").value,
+
+province:
+document.getElementById("provincia").value.trim(),
+
+city:
+document.getElementById("cidade").value.trim(),
+
+request_text:
+document.getElementById("pedido").value.trim()
+
+};
+
+
+try{
+
+const resposta = await fetch(
+URL_SMART_WORKER,
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(dados)
+}
+);
+
+
+const texto =
+await resposta.text();
+
+
+let retorno;
+
+try{
+
+retorno =
+JSON.parse(texto);
+
+}catch{
+
+retorno = {
+error:texto
+};
+
+}
+
+
+if(!resposta.ok){
+
+throw new Error(
+retorno.error ||
+retorno.details ||
+"Não foi possível enviar o pedido."
+);
+
+}
+
+
+resultado.className = "";
+
+resultado.style.display = "block";
+
+resultado.innerHTML =
+"✅ <strong>Pedido enviado com sucesso!</strong><br><br>" +
+"Recebemos o teu pedido. Entraremos em contacto contigo pelo WhatsApp.";
+
+
+form.reset();
+
+
+}catch(erro){
+
+resultado.className = "erro";
+
+resultado.style.display = "block";
+
+resultado.innerHTML =
+"❌ <strong>Não foi possível enviar o pedido.</strong><br><br>" +
+erro.message;
+
+
+}finally{
+
+botao.disabled = false;
+
+botao.textContent = "ENVIAR PEDIDO";
+
+}
+
+});
+
+</script>
+
+</body>
+  </html>
